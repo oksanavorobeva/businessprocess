@@ -1,0 +1,65 @@
+server:
+  port: 8086
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: REPORTING-SERVICE
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yaml
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091,localhost:9092,localhost:9093
+      group-id: reporting-events
+      properties:
+        spring-json-trusted-packages: by.javaguru.core
+        request.timeout.ms: 60000
+        session.timeout.ms: 30000
+        heartbeat.interval.ms: 10000
+        max.poll.interval.ms: 300000
+      isolation-level: read_committed
+      auto-offset-reset: earliest
+
+    producer:
+      reports-email-events:
+        name: reports-email-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+      reports-ready-events:
+        name: reports-ready-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+      bootstrap-servers: localhost:9091,localhost:9092,localhost:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        delivery-timeout-ms: 120000
+        linger-ms: 0
+        request-timeout-ms: 30000
+        enable-idempotence: true
+        max-in-flight-requests-per-connection: 5
+      transaction-id-prefix: reporting-metrics-service-${random.value}
+
+report:
+  source:
+    file: /Users/oksanavorobeva/Desktop/Java/businessProcess/reporting_service/sales_report.jrxml
+  destination:
+    directory: /Users/oksanavorobeva/Desktop/Java/businessProcess

@@ -1,0 +1,86 @@
+server:
+  port: 8082
+eureka:
+  instance:
+    ip-address: 127.0.0.1
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  application:
+    name: REPORT-SERVICE
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yaml
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9091,localhost:9092,localhost:9093
+      group-id: report-events
+      properties:
+        spring-json-trusted-packages: by.javaguru.core
+        request.timeout.ms: 60000
+        session.timeout.ms: 30000
+        heartbeat.interval.ms: 10000
+        max.poll.interval.ms: 300000
+      isolation-level: read_committed
+      auto-offset-reset: earliest
+
+    producer:
+      sales_reports-events:
+        name: sales_reports-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+      customer_reports-events:
+        name: customer_reports-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+      returns_reports-events:
+        name: returns_reports-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+      cache-reports-events:
+        name: cache-reports-events-topic
+        partitions: 3
+        replication-factor: 3
+        min-insync-replicas: 2
+
+
+      bootstrap-servers: localhost:9091,localhost:9092,localhost:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        delivery-timeout-ms: 20000
+        linger-ms: 0
+        request-timeout-ms: 10000
+        enable-idempotence: true
+        max-in-flight-requests-per-connection: 5
+      transaction-id-prefix: report-service-${random.value}
+
+
+
+
+

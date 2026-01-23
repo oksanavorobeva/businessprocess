@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using project ... -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CalculatedSalesReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="51271b7c-d7ca-4f1f-886e-6e4d7189e0b2">
+    <parameter name="reportName" class="java.lang.String"/>
+    <parameter name="rangeStart" class="java.time.LocalDate"/>
+    <parameter name="rangeEnd" class="java.time.LocalDate"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <field name="productName" class="java.lang.String">
+        <fieldDescription><![CDATA[productName]]></fieldDescription>
+    </field>
+    <field name="totalQuantitySold" class="java.lang.Integer">
+        <fieldDescription><![CDATA[totalQuantitySold]]></fieldDescription>
+    </field>
+    <field name="totalPrice" class="java.math.BigDecimal">
+        <fieldDescription><![CDATA[totalPrice]]></fieldDescription>
+    </field>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="100" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="0" width="535" height="30" uuid="fc13656c-78b8-4a66-9f4a-b1093b6777a7"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="20" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Отчет о продажах]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="30" width="535" height="30" uuid="ef98b3ea-ac9a-455f-8282-51ea92a43766"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{reportName}]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd.MM.yyyy">
+                <reportElement x="130" y="60" width="130" height="30" uuid="51b36fdc-420e-409d-8c5f-2ee40fa72903"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{rangeStart}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="260" y="60" width="25" height="30" uuid="a459d30f-191f-4ac1-a979-980c06f6619a"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[-]]></text>
+            </staticText>
+            <textField pattern="dd.MM.yyyy">
+                <reportElement x="285" y="60" width="130" height="30" uuid="31fd0e7e-78c7-4afc-b952-3a900a2e36c6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$P{rangeEnd}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="60" width="130" height="30" uuid="b3e124bf-aa06-46ff-9e51-8061f5b62a23"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Период:]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="30" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="0" width="178" height="30" uuid="444331c1-d8ec-453a-bb18-66f06a9961bb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Название продукта]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="178" y="0" width="178" height="30" uuid="7fd93b49-0bf5-401f-8a38-e01b8947463b"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Всего продано]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="356" y="0" width="179" height="30" uuid="5420d19f-6e85-46d9-b47c-9ac2b8b9e792"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Общая цена]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="30" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="178" height="30" uuid="e3b13424-47f6-4b84-bb66-47da8b0bce10"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="178" y="0" width="178" height="30" uuid="2ff54267-72ae-4813-9a44-1cc7e1ade63c"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{totalQuantitySold}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="356" y="0" width="179" height="30" uuid="c117006b-e93c-4988-bc6d-4e16ce5948bb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

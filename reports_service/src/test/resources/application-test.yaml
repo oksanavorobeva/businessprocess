@@ -1,0 +1,10 @@
+spring:
+  kafka:
+    consumer:
+      properties:
+        spring-json-trusted-packages: by.javaguru.core
+      group-id: "sales-reports-events"
+      auto-offset-reset: earliest
+
+      sales_reports-events:
+        name: sales_reports-events-topic

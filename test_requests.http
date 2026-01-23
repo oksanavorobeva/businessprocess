@@ -1,0 +1,42 @@
+
+
+###
+GET http://127.0.0.1:8888/api/v1/cvs/reportTemplates
+
+
+###
+POST  http://127.0.0.1:8888/api/v1/cvs/report
+Content-Type: application/json
+
+{
+  "reportId": 1,
+  "userEmail": "ksanka82@yandex.ru",
+  "rangeStart": "2023-01-01",
+  "rangeEnd": "2023-12-12"
+}
+
+###
+POST  http://127.0.0.1:8888/api/v1/cvs/report
+Content-Type: application/json
+
+{
+  "reportId": 1,
+  "userEmail": "oxana.vorobeva@yandex.ru",
+  "rangeStart": "2023-01-01",
+  "rangeEnd": "2023-12-12"
+}
+
+###
+GET http://127.0.0.1:8888/api/v1/cvs/report/1
+
+###
+GET http://127.0.0.1:8888/api/v1/cvs/report
+
+
+
+
+
+
+
+
+
