@@ -18,9 +18,11 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.context.ApplicationContext;
 
 
+import java.util.Map;
+
+//TODO:Название топиков и прочих свойств кафки лучше вынести в  yaml
 @Component
 @KafkaListener(topics = "sales_reports-events-topic", containerFactory = "kafkaListenerContainerFactory",
         groupId = "sales_report-created-events")
@@ -30,7 +32,7 @@ public class SalesReportsEventHandler {
 
     private final ProcessedEventService processedEventService;
     private final ReportConfigurationService reportConfigurationService;
-    private final ApplicationContext applicationContext;
+    private final Map<String, ReportStrategy> reportStrategies;
 
     @Transactional(value = "transactionManager")
     @KafkaHandler
@@ -58,9 +60,7 @@ public class SalesReportsEventHandler {
             }
 
             String strategyBeanName = reportConfiguration.getStrategyBeanName();
-
-            ReportStrategy strategy = (ReportStrategy) applicationContext.getBean(strategyBeanName);
-
+            ReportStrategy strategy = reportStrategies.get(strategyBeanName);
             strategy.generateReport(reportCreatedEvent);
 
             ProcessedEventEntity processedEvent = ProcessedEventEntity.builder()
@@ -73,10 +73,8 @@ public class SalesReportsEventHandler {
 
         } catch (NoActiveReportException e) {
             log.warn("No active report - skipping retry: {}", e.getMessage());
-            log.warn(e.getMessage(), e);
         } catch (Exception e) {
             log.error("Error saving processed event: {}", e.getMessage());
-            log.error(e.getMessage());
             throw new NonRetryableException(e);
         }
     }

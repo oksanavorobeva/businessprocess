@@ -4,4 +4,6 @@ import by.javaguru.core.ReportCreatedEvent;
 
 public interface ReportStrategy {
     void generateReport(ReportCreatedEvent reportCreatedEvent);
+
+    String getStrategyName();
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import reporting_service.kafka.ReportEmailEventsProducer;
 import reporting_service.kafka.ReportReadylEventsProducer;
+import reporting_service.usecasses.mapper.ReadyReportMapper;
 
 @Component
 @RequiredArgsConstructor
@@ -23,8 +24,8 @@ import reporting_service.kafka.ReportReadylEventsProducer;
 public class SalesReportEventHandler implements DtoReportHandler<SalesReportEvent> {
 
     private final ReportGenerationStrategy<CalculatedSalesReportEvent, SalesReportEvent> reportGenerationStrategy;
-    private final ReportEmailEventsProducer reportEmailEventsProducer;
-    private final ReportReadylEventsProducer reportReadylEventsProducer;
+private final ReadyReportMapper readyReportMapper;
+private final OutboxService outboxService;
 
     @Value("${report.source.file}")
     private String reportSourceFile;
@@ -38,29 +39,9 @@ public class SalesReportEventHandler implements DtoReportHandler<SalesReportEven
             String destFileName = generateDestinationFileName(salesReportEvent.getOrderId());
             generateSalesReport(salesReportEvent.getSalesReportEvents(), destFileName, salesReportEvent);
             log.info("SalesReport generated successfully for message ID: {}");
-
-            ReadyReportEvent readySalesReportEvent = new ReadyReportEvent();
-            readySalesReportEvent.setOrderId(salesReportEvent.getOrderId());
-            readySalesReportEvent.setReportName(salesReportEvent.getReportName());
-            readySalesReportEvent.setRangeStart(salesReportEvent.getRangeStart());
-            readySalesReportEvent.setRangeEnd(salesReportEvent.getRangeEnd());
-            readySalesReportEvent.setUserEmail(salesReportEvent.getUserEmail());
+            ReadyReportEvent readySalesReportEvent = readyReportMapper.toReady(salesReportEvent);
             readySalesReportEvent.setFilePath(destFileName);
-
-            try {
-                reportEmailEventsProducer.sendOrderEvent(readySalesReportEvent);
-                reportReadylEventsProducer.sendOrderEvent(readySalesReportEvent);
-            } catch (Exception e) {
-                throw new OrderDataMissingException(e.getMessage());
-            }
-
-            log.info("Send simple sales report for: {}",
-                    readySalesReportEvent.getOrderId()
-                    + " " + readySalesReportEvent.getReportName()
-                    + " " + readySalesReportEvent.getRangeStart()
-                    + " " + readySalesReportEvent.getRangeEnd()
-                    + " " + readySalesReportEvent.getUserEmail()
-                    + " " + readySalesReportEvent.getFilePath());
+            outboxService.readyReportCreatedEvent(readySalesReportEvent);
 
         } catch (Exception e) {
             log.error("Error generating SalesReport for message ID: {}", e);

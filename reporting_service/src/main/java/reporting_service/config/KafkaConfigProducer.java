@@ -50,8 +50,6 @@ public class KafkaConfigProducer {
     @Value("${spring.kafka.producer.properties.max-in-flight-requests-per-connection}")
     private int maxInFlightRequestsPerConnection;
 
-    @Value("${spring.kafka.producer.transaction-id-prefix}")
-    private String transactionIdPrefix;
 
     @Bean
     ProducerFactory<String, Object> producerFactory() {
@@ -65,23 +63,12 @@ public class KafkaConfigProducer {
         config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeoutMs);
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
         config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, maxInFlightRequestsPerConnection);
-        config.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionIdPrefix);
         return new DefaultKafkaProducerFactory<>(config);
     }
 
     @Bean
     KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
         return new KafkaTemplate<String, Object>(producerFactory);
-    }
-
-    @Bean
-    KafkaTransactionManager<String, Object> kafkaTransactionManager(ProducerFactory<String, Object> producerFactory) {
-        return new KafkaTransactionManager<String, Object>(producerFactory);
-    }
-
-    @Bean("transactionManager")
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
     }
 
     @Bean

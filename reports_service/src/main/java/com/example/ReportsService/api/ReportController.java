@@ -7,6 +7,8 @@ import com.example.ReportsService.usecasses.dto.ReportRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,23 +29,23 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReportDto> save(
+    public String save(
             @Valid @RequestBody ReportRequestDto request
     ) {
         log.info("Saving report {}", request);
-        ReportDto responseDto = reportService.createReport(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(responseDto);
+        reportService.createReport(request);
+        return "";
     }
 
     @GetMapping
-    public ResponseEntity<List<ReportDto>> getAllReport() {
-        List<ReportDto> orders = reportService.getAllReports();
-        log.info("Get all report {}", orders);
+    public ResponseEntity<Page<ReportDto>> getAllReports(Pageable pageable) {
+        log.info("Request to get a page of reports: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+        Page<ReportDto> page = reportService.getAllReports(pageable);
+        log.info("Fetched {} reports out of total {}", page.getNumberOfElements(), page.getTotalElements());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(orders);
+                .body(page);
     }
 
     @GetMapping("/{id}")

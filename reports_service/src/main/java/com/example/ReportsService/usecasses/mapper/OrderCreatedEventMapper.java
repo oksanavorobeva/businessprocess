@@ -12,7 +12,7 @@ import org.mapstruct.MappingConstants;
         builder = @Builder(disableBuilder = true))
 public interface OrderCreatedEventMapper {
 
-    @Mapping(target = "orderId", ignore = true)
+    @Mapping(target = "orderId", source = "id")
+    @Mapping(target = "reportName", source = "reportId.reportName")
     ReportCreatedEvent toOrderCreatedEvent(ReportDto orderDto);
-
 }

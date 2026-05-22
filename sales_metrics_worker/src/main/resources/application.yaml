@@ -50,7 +50,6 @@ spring:
         request-timeout-ms: 30000
         enable-idempotence: true
         max-in-flight-requests-per-connection: 5
-      transaction-id-prefix: sales-metrics-service-${random.value}
 logging:
  level:
   org.springframework.kafka: TRACE

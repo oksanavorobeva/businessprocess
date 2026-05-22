@@ -21,6 +21,7 @@ public class ReportTemplate {
     @Column(name = "report_name")
     private String reportName;
 
-    @Column(name = "topic")
-    private String topic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 }

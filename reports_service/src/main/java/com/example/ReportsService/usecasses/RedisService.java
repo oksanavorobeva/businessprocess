@@ -1,9 +1,12 @@
 package com.example.ReportsService.usecasses;
 
 
+import by.javaguru.core.ReadyReportEvent;
+import com.example.ReportsService.persistence.model.Report;
 import com.example.ReportsService.persistence.model.ReportKey;
 import com.example.ReportsService.usecasses.dto.ReportCacheDto;
 import com.example.ReportsService.usecasses.dto.ReportDto;
+import com.example.ReportsService.usecasses.mapper.CacheEventMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,8 +20,22 @@ import java.time.Duration;
 public class RedisService {
 
     private final RedisTemplate<ReportKey, ReportCacheDto> redisTemplate;
+    private final CacheEventMapper cacheEventMapper;
 
     private static final Duration REPORT_CACHE_DURATION = Duration.ofHours(24);
+
+    public ReportCacheDto checkReport(Report savedReport) {
+        try {
+            ReportKey reportKey = getReportKey(savedReport);
+            log.info("ReportKey {}", reportKey);
+            ReportCacheDto cachedReport = getReportFromCache(reportKey);
+            log.info("Saved cachedReport {}", cachedReport);
+            return cachedReport;
+        } catch (Exception e) {
+            log.error("Error getting cached report: ", e);
+        }
+        return null;
+    }
 
     public ReportCacheDto getReportFromCache(ReportKey reportKey) {
         try {
@@ -30,7 +47,9 @@ public class RedisService {
         }
     }
 
-    public void saveReportToCache(ReportKey key, ReportCacheDto reportCacheDto) {
+    public void saveReportToCache(ReportDto reportDto, ReadyReportEvent readyReportEvent) {
+        ReportKey key = generateKey(reportDto);
+        ReportCacheDto reportCacheDto = cacheEventMapper.toReportCacheDReadyReportEvent(readyReportEvent);
         try {
             redisTemplate.opsForValue().set(key, reportCacheDto, REPORT_CACHE_DURATION);
             log.info("Report saved to Redis with key: {}", key);
@@ -43,6 +62,14 @@ public class RedisService {
         return new ReportKey(report.getReportId().getReportName(),
                 report.getRangeStart(),
                 report.getRangeEnd());
+    }
+
+    public ReportKey getReportKey(Report savedReport) {
+        ReportKey reportKey = new ReportKey();
+        reportKey.setReportName(savedReport.getReportId().getReportName());
+        reportKey.setRangeEnd(savedReport.getRangeEnd());
+        reportKey.setRangeStart(savedReport.getRangeStart());
+        return reportKey;
     }
 }
 

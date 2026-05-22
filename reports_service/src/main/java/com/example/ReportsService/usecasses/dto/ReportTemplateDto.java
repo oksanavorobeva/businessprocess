@@ -1,5 +1,6 @@
 package com.example.ReportsService.usecasses.dto;
 
+import com.example.ReportsService.persistence.model.Topic;
 import lombok.*;
 
 @Getter
@@ -9,5 +10,5 @@ import lombok.*;
 public class ReportTemplateDto {
     private Long reportId;
     private String reportName;
-    private String topic;
+    private Topic topic;
 }

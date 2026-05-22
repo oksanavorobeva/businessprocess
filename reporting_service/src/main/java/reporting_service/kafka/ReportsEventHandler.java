@@ -28,7 +28,7 @@ public class ReportsEventHandler {
 
     private final SalesReportEventHandler salesReportEventHandler;
 
-    @Transactional(value = "transactionManager")
+    @Transactional
     @KafkaHandler
     public void handler(@Payload SalesReportEvent salesReportEvent,
                         @Header("messageId") String messageId,
