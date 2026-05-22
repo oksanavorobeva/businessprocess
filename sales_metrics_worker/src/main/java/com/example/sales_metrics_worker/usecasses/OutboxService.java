@@ -1,8 +1,6 @@
 package com.example.sales_metrics_worker.usecasses;
 
 
-import by.javaguru.core.ReadyReportEvent;
-import by.javaguru.core.ReportCreatedEvent;
 import by.javaguru.core.SalesReportEvent;
 import com.example.sales_metrics_worker.persistence.model.Outbox;
 import com.example.sales_metrics_worker.persistence.model.OutboxType;
@@ -30,7 +28,7 @@ public class OutboxService {
     private final OutboxRecordProcessor recordProcessor;
     private final OutboxMapper outboxMapper;
     private final ObjectMapper objectMapper;
-    private  OutboxType outboxType;
+    private OutboxType outboxType;
 
     @Transactional
     public void processAll() {
@@ -62,6 +60,4 @@ public class OutboxService {
         outboxRepository.save(outbox);
         log.info("Created outbox: {}", outbox.toString());
     }
-
-
 }

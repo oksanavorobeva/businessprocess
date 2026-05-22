@@ -36,7 +36,7 @@ public class SimpleSalesReportStrategy implements ReportStrategy {
 
         List<CalculatedSalesReportEvent> calculatedReports = calculateSalesReport(reportCreatedEvent);
 
-        SalesReportEvent salesReport = salesReportEventMapper.toSalesReportEvent(reportCreatedEvent,calculatedReports);
+        SalesReportEvent salesReport = salesReportEventMapper.toSalesReportEvent(reportCreatedEvent, calculatedReports);
 
         outboxService.createSalesReportCreatedEvent(salesReport);
     }

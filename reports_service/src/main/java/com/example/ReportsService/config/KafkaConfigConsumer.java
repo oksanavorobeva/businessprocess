@@ -1,8 +1,5 @@
 package com.example.ReportsService.config;
 
-
-
-
 import by.javaguru.core.exception.NonRetryableException;
 import by.javaguru.core.exception.RetryableException;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

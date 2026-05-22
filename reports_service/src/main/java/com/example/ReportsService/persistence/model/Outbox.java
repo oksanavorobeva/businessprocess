@@ -26,7 +26,7 @@ public class Outbox {
     @Column(name = "payload", columnDefinition = "jsonb") // Укажите явно, что это jsonb
     private String payload;
 
-    @Column(name="created")
+    @Column(name = "created")
     private LocalDateTime created;
 
     @Column(name = "type")

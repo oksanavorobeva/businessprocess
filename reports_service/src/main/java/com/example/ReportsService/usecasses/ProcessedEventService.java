@@ -1,7 +1,6 @@
 package com.example.ReportsService.usecasses;
 
 
-
 import com.example.ReportsService.persistence.model.ProcessedEventEntity;
 import com.example.ReportsService.persistence.repository.ProcessedEventRepository;
 import lombok.RequiredArgsConstructor;

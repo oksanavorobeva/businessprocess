@@ -1,7 +1,6 @@
 package com.example.sales_metrics_worker.scheduler;
 
 
-
 import com.example.sales_metrics_worker.usecasses.OutboxService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

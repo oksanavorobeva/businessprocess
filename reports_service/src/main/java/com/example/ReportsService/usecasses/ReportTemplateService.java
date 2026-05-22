@@ -8,6 +8,8 @@ import com.example.ReportsService.usecasses.mapper.ReportTemplateMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +30,11 @@ public class ReportTemplateService {
                 .orElseThrow(() -> new EntityNotFoundException("ReportTemplate not found with id: " + id));
     }
 
-    public List<ReportTemplateDto> getAllReportTemplates() {
-        return reportTemplateRepository.findAll().stream()
+    @Transactional(readOnly = true)
+    public Page<ReportTemplateDto> getAllReportTemplates(Pageable pageable) {
+        return reportTemplateRepository.findAll(pageable)
                 .map(reportTemplateMapper::toDto)
-                .toList();
+                ;
     }
 
     public String getReportTemplateByName(String name) {

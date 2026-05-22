@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -38,10 +39,13 @@ public class ReportController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ReportDto>> getAllReports(Pageable pageable) {
-        log.info("Request to get a page of reports: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+    public ResponseEntity<Page<ReportDto>> getAllReports(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        log.info("Request to get a page of reports: page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
         Page<ReportDto> page = reportService.getAllReports(pageable);
-        log.info("Fetched {} reports out of total {}", page.getNumberOfElements(), page.getTotalElements());
+        log.info("Fetched {} reports out of total {}",
+                page.getNumberOfElements(), page.getTotalElements());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

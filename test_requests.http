@@ -1,11 +1,29 @@
+### Get Token
+POST http://localhost:8080/realms/my-project/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
 
+client_id=backend-client&
+client_secret=AoNDt1Z4UeM4JRbisXMsxxBppf4jg6hu&
+grant_type=password&
+username=useradmin&
+password=admin
+
+
+> {%
+    client.global.set("authToken", response.body.access_token);
+%}
 
 ###
-GET http://127.0.0.1:8888/api/v1/cvs/reportTemplates
-
-
+GET http://127.0.0.1:8888/api/v1/cvs/reportTemplates?page=0&size=20&sort=reportId,desc
+Authorization: Bearer {{authToken}}
 ###
+
+GET http://127.0.0.1:8888/api/v1/cvs/report?page=0&size=20&sort=id,desc
+Authorization: Bearer {{authToken}}
+###
+
 POST  http://127.0.0.1:8888/api/v1/cvs/report
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
@@ -15,22 +33,11 @@ Content-Type: application/json
   "rangeEnd": "2023-12-01"
 }
 
-###
-POST  http://127.0.0.1:8888/api/v1/cvs/report
-Content-Type: application/json
 
-{
-  "reportId": 4,
-  "userEmail": "oxana.vorobeva@yandex.ru",
-  "rangeStart": "2023-01-05",
-  "rangeEnd": "2023-12-12"
-}
 
 ###
-GET http://127.0.0.1:8888/api/v1/cvs/report/1
 
-###
-GET http://127.0.0.1:8888/api/v1/cvs/report
+
 
 
 

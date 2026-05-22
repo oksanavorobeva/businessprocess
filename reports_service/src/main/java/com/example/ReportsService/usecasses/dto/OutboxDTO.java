@@ -1,7 +1,6 @@
 package com.example.ReportsService.usecasses.dto;
 
 
-
 import com.example.ReportsService.persistence.model.OutboxType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

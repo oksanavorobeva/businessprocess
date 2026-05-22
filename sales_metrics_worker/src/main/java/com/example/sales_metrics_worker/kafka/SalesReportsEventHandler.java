@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
-//TODO:Название топиков и прочих свойств кафки лучше вынести в  yaml
 @Component
 @KafkaListener(topics = "sales_reports-events-topic", containerFactory = "kafkaListenerContainerFactory",
         groupId = "sales_report-created-events")

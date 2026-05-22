@@ -3,7 +3,6 @@ package com.example.ReportsService.usecasses;
 
 import by.javaguru.core.ReadyReportEvent;
 import by.javaguru.core.ReportCreatedEvent;
-import by.javaguru.core.exception.OrderDataMissingException;
 import com.example.ReportsService.persistence.model.Outbox;
 import com.example.ReportsService.persistence.model.OutboxType;
 import com.example.ReportsService.persistence.repository.OutboxRepository;

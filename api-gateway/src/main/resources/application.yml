@@ -14,13 +14,25 @@ server:
 spring:
   application:
     name: API-GATEWAY
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/my-project
   cloud:
     gateway:
       routes:
-        - id: REPORT-SERVICE
+        - id: REPORT-MAIN-SERVICE
           uri: lb://report-service
           predicates:
-            - Path=/api/v1/cvs/**
+            - Path=/api/v1/cvs/report/**
+
+        - id: REPORT-TEMPLATES-SERVICE
+          uri: lb://report-service
+          predicates:
+            - Path=/api/v1/cvs/reportTemplates/**
+
+
 
 
 

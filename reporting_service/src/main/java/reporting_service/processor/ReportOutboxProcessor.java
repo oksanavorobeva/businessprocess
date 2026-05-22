@@ -1,7 +1,6 @@
 package reporting_service.processor;
 
 
-
 import by.javaguru.core.ReadyReportEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

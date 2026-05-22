@@ -14,8 +14,6 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Value;
-import reporting_service.kafka.ReportEmailEventsProducer;
-import reporting_service.kafka.ReportReadylEventsProducer;
 import reporting_service.usecasses.mapper.ReadyReportMapper;
 
 @Component
@@ -24,8 +22,8 @@ import reporting_service.usecasses.mapper.ReadyReportMapper;
 public class SalesReportEventHandler implements DtoReportHandler<SalesReportEvent> {
 
     private final ReportGenerationStrategy<CalculatedSalesReportEvent, SalesReportEvent> reportGenerationStrategy;
-private final ReadyReportMapper readyReportMapper;
-private final OutboxService outboxService;
+    private final ReadyReportMapper readyReportMapper;
+    private final OutboxService outboxService;
 
     @Value("${report.source.file}")
     private String reportSourceFile;
