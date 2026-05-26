@@ -29,7 +29,7 @@ public class RedisService {
         getReportFromCache(reportKey);
         log.info("Report found in cache, returning cached report.");
         ReadyReportEvent readyReportEvent = cacheEventMapper.toreadyReportEvent(cachedReport);
-        log.info("Report for template {} found in cache", report.getReportTemplate().getReportId());
+        log.info("Report for template {} found in cache", report.getReportId().getReportId());
         return readyReportEvent;
     }
 
@@ -75,7 +75,7 @@ public class RedisService {
 
     public ReportKey getReportKey(Report savedReport) {
         ReportKey reportKey = new ReportKey();
-        reportKey.setReportName(savedReport.getReportTemplate().getReportName());
+        reportKey.setReportName(savedReport.getReportId().getReportName());
         reportKey.setRangeEnd(savedReport.getRangeEnd());
         reportKey.setRangeStart(savedReport.getRangeStart());
         return reportKey;

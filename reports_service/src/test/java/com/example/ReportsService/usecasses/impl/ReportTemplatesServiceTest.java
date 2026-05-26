@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.ReportsService.ReportTemplateTestData.*;
-import static com.example.ReportsService.ReportTestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,13 +37,12 @@ class ReportTemplatesServiceTest {
     @Mock
     private ReportTemplateMapperImpl reportTemplateMapper;
 
-
     @Test
     void getReportTemplateById_whenReportExists_shouldReturnReport() {
         ReportTemplate reportTemplate = createReportTemplate();
         when(reportTemplateRepository.findById(any())).thenReturn(Optional.of(reportTemplate));
 
-        reportTemplateService.getById(any());
+        reportTemplateService.getReportTemplateById(any());
 
         verify(reportTemplateRepository, times(1)).findById(any());
         verifyNoMoreInteractions(reportTemplateRepository);

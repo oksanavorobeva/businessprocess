@@ -25,7 +25,6 @@ public class ReportCreatedEventsProducer {
 
     public SendResult<String, ReportCreatedEvent> sendOrderEvent(ReportCreatedEvent reportCreatedEvent)
             throws ExecutionException, InterruptedException {
-
         String topicName = reportTemplateService.getReportTemplateByName(reportCreatedEvent.getReportName());
         String eventId = String.valueOf(reportCreatedEvent.getOrderId());
         ProducerRecord<String, ReportCreatedEvent> orderRecord =

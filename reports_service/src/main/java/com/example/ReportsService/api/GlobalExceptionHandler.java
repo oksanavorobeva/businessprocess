@@ -4,6 +4,7 @@ package com.example.ReportsService.api;
 import by.javaguru.core.exception.ErrorResponse;
 import com.example.ReportsService.api.exception.ReportNotFoundException;
 import com.example.ReportsService.api.exception.TopicNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime;
 
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     private static final String EUROPE_MINSK = "Europe/Minsk";
