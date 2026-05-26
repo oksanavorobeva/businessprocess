@@ -55,6 +55,7 @@ public class OutboxService {
         String payload = objectMapper.writeValueAsString(reportCreatedEvent);
         OutboxDTO outboxDTO = new OutboxDTO();
         outboxDTO.setPayload(payload);
+        outboxDTO.setPayload(payload);
         outboxDTO.setType(outboxType.OrderEvent);
         outboxDTO.setCreated(LocalDateTime.now());
         Outbox outbox = outboxMapper.fromDtoToEntity(outboxDTO);

@@ -26,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.example.ReportsService.ReadyReportEventData.*;
-import static com.example.ReportsService.ReportTemplateTestData.*;
 import static com.example.ReportsService.ReportTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,13 +58,11 @@ class ReportServiceTest {
     @Test
     void shouldCreateNewReportWhenNotFoundInRedis() {
         ReportCreatedEvent createdEvent = ReportCreatedEventData.createdReportCreatedEvent();
-        ReportTemplate reportTemplate = createReportTemplate();
         ReportRequestDto requestDto = createRequestDto();
         ReportDto reportDto = createReportDto();
 
         Report report = createReport().build();
-        when(reportTemplateService.getById(anyLong())).thenReturn(reportTemplate);
-        when(reportMapper.toEntity(requestDto, reportTemplate)).thenReturn(report);
+        when(reportMapper.toEntity(requestDto)).thenReturn(report);
         when(redisService.checkReport(report)).thenReturn(null);
         when(reportRepository.save(report)).thenReturn(report);
         when(reportMapper.toDto(report)).thenReturn(reportDto);
@@ -83,14 +80,12 @@ class ReportServiceTest {
 
     @Test
     void shouldUseCachedReportWhenFoundInRedis() {
-        ReportTemplate reportTemplate = createReportTemplate();
         ReportRequestDto requestDto = createRequestDto();
         Report report = createReport().build();
         ReportCacheDto cachedReport = createReportCacheDto();
         ReadyReportEvent readyEvent = createdReadyReportEvent();
 
-        when(reportTemplateService.getById(anyLong())).thenReturn(reportTemplate);
-        when(reportMapper.toEntity(requestDto, reportTemplate)).thenReturn(report);
+        when(reportMapper.toEntity(requestDto)).thenReturn(report);
         when(redisService.checkReport(report)).thenReturn(cachedReport);
         when(redisService.processCachedReport(report, cachedReport)).thenReturn(readyEvent);
 

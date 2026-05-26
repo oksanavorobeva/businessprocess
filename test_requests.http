@@ -29,7 +29,7 @@ Content-Type: application/json
 {
   "reportId": 1,
   "userEmail": "ksanka82@yandex.ru",
-  "rangeStart": "2023-01-12",
+  "rangeStart": "2023-01-01",
   "rangeEnd": "2023-12-01"
 }
 

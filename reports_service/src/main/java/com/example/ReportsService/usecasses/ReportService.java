@@ -5,7 +5,6 @@ import by.javaguru.core.ReadyReportEvent;
 import by.javaguru.core.ReportCreatedEvent;
 import com.example.ReportsService.api.exception.ReportNotFoundException;
 import com.example.ReportsService.persistence.model.Report;
-import com.example.ReportsService.persistence.model.ReportTemplate;
 import com.example.ReportsService.persistence.model.Status;
 import com.example.ReportsService.persistence.repository.ReportRepository;
 import com.example.ReportsService.usecasses.dto.ReportCacheDto;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,15 +32,11 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final OrderCreatedEventMapper orderCreatedEventMapper;
     private final OutboxService outboxService;
-    private final ReportTemplateService reportTemplateService;
     private final RedisService redisService;
 
     @Transactional
     public String createReport(ReportRequestDto requestDto) {
-
-        ReportTemplate template = reportTemplateService.getById(requestDto.getReportId());
-        Report report = reportMapper.toEntity(requestDto, template);
-
+        Report report = reportMapper.toEntity(requestDto);
         ReportCacheDto cachedReport = redisService.checkReport(report);
         if (cachedReport != null) {
             ReadyReportEvent readyReportEvent = redisService.processCachedReport(report, cachedReport);

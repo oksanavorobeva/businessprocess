@@ -5,7 +5,6 @@ import lombok.*;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Builder(setterPrefix = "with")
@@ -23,7 +22,7 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", nullable = false)
-    ReportTemplate reportTemplate;
+    ReportTemplate reportId;
 
     @Column(name = "range_Start")
     private LocalDate rangeStart;

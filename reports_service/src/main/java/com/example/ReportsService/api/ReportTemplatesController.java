@@ -27,12 +27,23 @@ public class ReportTemplatesController {
     @GetMapping
     public ResponseEntity<Page<ReportTemplateDto>> getAllReportTemplates(
             @PageableDefault(size = 20, sort = "reportId") Pageable pageable) {
+        ;
+
         log.info("Request for report templates page: {}", pageable.getPageNumber());
-        Page<ReportTemplateDto> templates = reportTemplateService.getAllReportTemplates(pageable);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(templates);
+
+        // Проверяем сортировку
+        log.info("Sort parameter: {}", pageable.getSort());
+
+        try {
+            Page<ReportTemplateDto> templates = reportTemplateService.getAllReportTemplates(pageable);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(templates);
+        } catch (Exception e) {
+            log.error("Error fetching report templates: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }
 
