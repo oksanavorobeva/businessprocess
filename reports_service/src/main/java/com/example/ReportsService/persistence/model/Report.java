@@ -23,7 +23,7 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", nullable = false)
-    ReportTemplate reportId;
+    ReportTemplate reportTemplate;
 
     @Column(name = "range_Start")
     private LocalDate rangeStart;
@@ -42,5 +42,5 @@ public class Report {
     private Status status;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private LocalDate date;
 }

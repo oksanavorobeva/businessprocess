@@ -24,6 +24,15 @@ public class RedisService {
 
     private static final Duration REPORT_CACHE_DURATION = Duration.ofHours(24);
 
+    public ReadyReportEvent processCachedReport(Report report, ReportCacheDto cachedReport) {
+        ReportKey reportKey = getReportKey(report);
+        getReportFromCache(reportKey);
+        log.info("Report found in cache, returning cached report.");
+        ReadyReportEvent readyReportEvent = cacheEventMapper.toreadyReportEvent(cachedReport);
+        log.info("Report for template {} found in cache", report.getReportTemplate().getReportId());
+        return readyReportEvent;
+    }
+
     public ReportCacheDto checkReport(Report savedReport) {
         try {
             ReportKey reportKey = getReportKey(savedReport);
@@ -66,7 +75,7 @@ public class RedisService {
 
     public ReportKey getReportKey(Report savedReport) {
         ReportKey reportKey = new ReportKey();
-        reportKey.setReportName(savedReport.getReportId().getReportName());
+        reportKey.setReportName(savedReport.getReportTemplate().getReportName());
         reportKey.setRangeEnd(savedReport.getRangeEnd());
         reportKey.setRangeStart(savedReport.getRangeStart());
         return reportKey;

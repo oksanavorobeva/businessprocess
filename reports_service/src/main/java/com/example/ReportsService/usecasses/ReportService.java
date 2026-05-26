@@ -5,13 +5,12 @@ import by.javaguru.core.ReadyReportEvent;
 import by.javaguru.core.ReportCreatedEvent;
 import com.example.ReportsService.api.exception.ReportNotFoundException;
 import com.example.ReportsService.persistence.model.Report;
-import com.example.ReportsService.persistence.model.ReportKey;
+import com.example.ReportsService.persistence.model.ReportTemplate;
 import com.example.ReportsService.persistence.model.Status;
 import com.example.ReportsService.persistence.repository.ReportRepository;
 import com.example.ReportsService.usecasses.dto.ReportCacheDto;
 import com.example.ReportsService.usecasses.dto.ReportDto;
 import com.example.ReportsService.usecasses.dto.ReportRequestDto;
-import com.example.ReportsService.usecasses.mapper.CacheEventMapper;
 import com.example.ReportsService.usecasses.mapper.OrderCreatedEventMapper;
 import com.example.ReportsService.usecasses.mapper.ReportMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Service
@@ -32,23 +31,23 @@ public class ReportService {
     private final ReportMapper reportMapper;
     private final ReportRepository reportRepository;
     private final OrderCreatedEventMapper orderCreatedEventMapper;
-    private final CacheEventMapper cacheEventMapper;
     private final OutboxService outboxService;
+    private final ReportTemplateService reportTemplateService;
     private final RedisService redisService;
 
     @Transactional
     public String createReport(ReportRequestDto requestDto) {
-        Report report = reportMapper.toEntity(requestDto);
+
+        ReportTemplate template = reportTemplateService.getById(requestDto.getReportId());
+        Report report = reportMapper.toEntity(requestDto, template);
+
         ReportCacheDto cachedReport = redisService.checkReport(report);
         if (cachedReport != null) {
-            ReportKey reportKey = redisService.getReportKey(report);
-            redisService.getReportFromCache(reportKey);
-            log.info("Report found in cache, returning cached report.");
-            ReadyReportEvent readyReportEvent = cacheEventMapper.toreadyReportEvent(cachedReport);
+            ReadyReportEvent readyReportEvent = redisService.processCachedReport(report, cachedReport);
             outboxService.createReportReadyEvent(readyReportEvent);
             return "Отчет отправлен на почту";
         } else {
-            report.setDate(LocalDateTime.now());
+            report.setDate(LocalDate.now());
             report.setStatus(Status.PROCESSING);
             Report savedReport = reportRepository.save(report);
             ReportDto dto = reportMapper.toDto(savedReport);

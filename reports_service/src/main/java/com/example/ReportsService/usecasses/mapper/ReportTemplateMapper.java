@@ -1,7 +1,6 @@
 package com.example.ReportsService.usecasses.mapper;
 
 import com.example.ReportsService.persistence.model.ReportTemplate;
-import com.example.ReportsService.persistence.model.Topic;
 import com.example.ReportsService.usecasses.dto.ReportTemplateDto;
 
 import org.mapstruct.Builder;

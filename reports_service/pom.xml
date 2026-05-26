@@ -121,16 +121,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- Maven -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate5</artifactId> <!-- Или jackson-datatype-hibernate6 -->
-            <version>2.19.2</version>  <!-- Используйте версию Jackson, которую вы используете -->
+            <artifactId>jackson-datatype-hibernate5</artifactId>
+            <version>2.19.2</version>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version> <!-- Или более поздняя версия, которая соответствует вашей Hibernate/JPA -->
+            <version>2.2</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -138,8 +137,9 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId> <!-- Для Java 8+ Date/Time API -->
+            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
